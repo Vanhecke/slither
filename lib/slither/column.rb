@@ -4,7 +4,7 @@ class Slither
   class ParserError < RuntimeError; end
 
   class Column
-    attr_reader :name, :length, :alignment, :type, :padding, :precision, :options
+    attr_reader :name, :length, :alignment, :type, :padding, :precision, :default_value, :options
 
     def initialize(name, length, options = {})
       assert_valid_options(options)
@@ -14,6 +14,7 @@ class Slither
       @alignment = options[:align] || :right
       @type = options[:type] || :string
       @padding = options[:padding] || :space
+      @default_value = options[:default_value]
       @truncate = options[:truncate] || false
       # Only used with floats, this determines the decimal places
       @precision = options[:precision]
@@ -44,7 +45,7 @@ class Slither
     end
 
     def format(value)
-      pad(formatter % to_s(value))
+      pad(formatter % to_s(apply_default(value)))
     rescue
       puts "Could not format column '#{@name}' as a '#{@type}' with formatter '#{formatter}' and value of '#{value}' (formatted: '#{to_s(value)}'). #{$!}"
     end
@@ -61,6 +62,10 @@ class Slither
 
       def sizer
         (@type == :float && @precision) ? @precision : @length
+      end
+
+      def apply_default(value)
+        value.to_s.strip.length == 0 ? @default_value : value
       end
 
       # Manually apply padding. sprintf only allows padding on numeric fields.
