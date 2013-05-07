@@ -65,7 +65,7 @@ class Slither
       end
 
       def apply_default(value)
-        value.to_s.strip.length == 0 ? @default_value : value
+        value.to_s.strip.empty? ? @default_value : value
       end
 
       # Manually apply padding. sprintf only allows padding on numeric fields.
