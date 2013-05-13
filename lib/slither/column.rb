@@ -18,6 +18,7 @@ class Slither
       @truncate = options[:truncate] || false
       # Only used with floats, this determines the decimal places
       @precision = options[:precision]
+
     end
 
     def unpacker
@@ -65,7 +66,7 @@ class Slither
       end
 
       def apply_default(value)
-        value.to_s.strip.empty? ? @default_value : value
+        value.to_s.empty? ? @default_value : value
       end
 
       # Manually apply padding. sprintf only allows padding on numeric fields.
