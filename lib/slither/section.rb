@@ -71,7 +71,7 @@ class Slither
     end
     
     def match(raw_line)
-      raw_line.nil? ? false : @trap.call(raw_line)
+      raw_line.nil? ? false : @trap.nil? ? true : @trap.call(raw_line)
     end
     
     def method_missing(method, *args)
