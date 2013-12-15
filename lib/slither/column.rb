@@ -101,11 +101,12 @@ class Slither
               value.to_s
             end
           when :float
-            @options[:format] ? @options[:format] % value.to_f : value.to_f.to_s
+			numeric_value = as_numeric(value)
+            @options[:format] ? @options[:format] % numeric_value : numeric_value.to_s
           when :money
-            "%.2f" % value.to_f
+            "%.2f" % as_numeric(value)
           when :money_with_implied_decimal
-            "%d" % (value.to_f * 100)
+            "%d" % (as_numeric(value) * 100)
           else
             value.to_s
         end
@@ -135,5 +136,12 @@ class Slither
         end
         result
       end
+
+	  def as_numeric(value)
+		  # if we are already numeric, particularly BigDecimal, but double
+		  # or float apply as well, we have no reason to convert and may
+		  # induce precision issue if we convert without needing it
+		  value.kind_of(Numeric) ? value : value.to_f
+	  end
   end
 end
