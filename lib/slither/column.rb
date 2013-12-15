@@ -141,7 +141,7 @@ class Slither
 		  # if we are already numeric, particularly BigDecimal, but double
 		  # or float apply as well, we have no reason to convert and may
 		  # induce precision issue if we convert without needing it
-		  value.kind_of(Numeric) ? value : value.to_f
+		  value.kind_of?(Numeric) ? value : value.to_f
 	  end
   end
 end
